@@ -1,0 +1,30 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+  node-app:
+    deploy:
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - nginx
+    build: 
+      context: .
+      args:
+        - NODE_ENV=${NODE_ENV}
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    command: npm start
+    environment:
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - NODE_ENV=${NODE_ENV}
