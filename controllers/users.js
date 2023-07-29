@@ -78,7 +78,7 @@ exports.getUsers = async (req, res) => {
        const users = await User.find();
        console.log("testing nginx : load balancing")
          return res.status(200).json({
-            totalUsers : users.length,
+            all_users : users.length,
             message: "Users fetched successfully",
             users
         }); 
